@@ -1,0 +1,20 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+  api(libs.bundles.gdx)
+  implementation(libs.bundles.testing)
+  implementation(libs.gdx.backend.headless)
+  implementation("com.badlogicgames.gdx:gdx-platform:${libs.versions.gdx.get()}:natives-desktop") // Should not be needed if we use headless :(
+
+  if(enableGraalNative == 'true') {
+    implementation(libs.graal.helper.annotations)
+  }
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+  }
+}

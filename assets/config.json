@@ -1,0 +1,14 @@
+{
+  "globals" : {
+    "debug": true,
+    "debugStateMachine": false
+  },
+  "levels":[
+    {
+      "startView": {"x": 360, "y": 540, "z": 0}
+    },
+    {
+      "startView": {"x": 360, "y": 540, "z": 0}
+    }
+  ]
+}

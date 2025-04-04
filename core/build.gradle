@@ -1,0 +1,32 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+  implementation(project(':common'))
+  implementation(libs.bundles.smr)
+
+  compileOnly(libs.record.builder.core)
+  annotationProcessor(libs.record.builder.processor)
+
+  api(libs.bundles.gdx)
+
+  implementation(libs.javax.inject)
+  implementation(libs.dagger)
+  annotationProcessor(libs.dagger.compiler)
+  implementation(libs.immutables.value.annotations)
+  annotationProcessor(libs.immutables.value)
+
+  testImplementation(libs.bundles.testing)
+  testImplementation(project(':gdx-test'))
+
+  if (enableGraalNative == 'true') {
+    implementation(libs.graal.helper.annotations)
+  }
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+  }
+}
