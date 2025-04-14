@@ -75,6 +75,7 @@ public class Initializer extends ScreenAdapter {
                 .build();
             topLevelApplication.setGameComponent(component);
             topLevelApplication.showTitle();
+            shapeRenderer.dispose();
         }
     }
 
