@@ -10,8 +10,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.codeheadsystems.engine.TopLevelApplication;
 import com.codeheadsystems.engine.module.DaggerGameComponent;
@@ -27,20 +29,25 @@ public class Initializer extends ScreenAdapter {
 
     private final String TAG = getClass().getSimpleName();
     private final TopLevelApplication topLevelApplication;
+    private final Rectangle progressBarBounds;
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
     private Texture image;
     private AssetManager assetManager;
 
     public Initializer(final TopLevelApplication topLevelApplication) {
         this.topLevelApplication = topLevelApplication;
+        this.progressBarBounds = new Rectangle();
     }
 
     @Override
     public void show() {
         log.debug(TAG, "constructor()");
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         image = new Texture("loading.png");
         assetManager = createAssetManager();
+        getProgressBarBounds();
     }
 
     @Override
@@ -51,6 +58,13 @@ public class Initializer extends ScreenAdapter {
             batch.begin();
             batch.draw(image, 140, 210);
             batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1f);
+            shapeRenderer.rect(progressBarBounds.x, progressBarBounds.y, progressBarBounds.width, progressBarBounds.height);
+            shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 1f);
+            shapeRenderer.rect(progressBarBounds.x, progressBarBounds.y, progressBarBounds.width * assetManager.getProgress(), progressBarBounds.height);
+            shapeRenderer.end();
         } else {
             log.debug(TAG, "Asset manager is done");
             final GdxModule gdxModule = new GdxModule(assetManager);
@@ -62,6 +76,16 @@ public class Initializer extends ScreenAdapter {
             topLevelApplication.setGameComponent(component);
             topLevelApplication.showTitle();
         }
+    }
+
+    private void getProgressBarBounds() {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float barWidthStart = screenWidth * 0.1f; // 10% in
+        float barHeightStart = screenHeight * 0.1f; // 50% down
+        float barWidth = screenWidth - (barWidthStart * 2);
+        float barHeight = screenHeight * 0.05f;
+        progressBarBounds.set(barWidthStart, barHeightStart, barWidth, barHeight);
     }
 
     @Override
