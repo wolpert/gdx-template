@@ -33,4 +33,8 @@ public class AsepriteFactory {
         return assetManager.get(asepriteAssetName, Aseprite.class);
     }
 
+    public AnimatedSprite getAnimatedSprite(String animatedSpriteIdentifier) {
+        return new AnimatedSprite(getAseprite(animatedSpriteIdentifier));
+    }
+
 }
