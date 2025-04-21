@@ -2,6 +2,7 @@
 
 dependencies {
   implementation(project(':common'))
+  implementation(project(':aseprite'))
   implementation(libs.bundles.smr)
 
   compileOnly(libs.record.builder.core)

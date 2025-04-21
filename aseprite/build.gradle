@@ -1,0 +1,22 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+  }
+}
+
+
+dependencies {
+  api(libs.gdx)
+  implementation(libs.javax.inject)
+  implementation(project(":common"))
+
+  testImplementation(libs.bundles.testing)
+
+  if(enableGraalNative == 'true') {
+    implementation(libs.graal.helper.annotations)
+  }
+}

@@ -5,7 +5,7 @@ import static com.codeheadsystems.engine.utility.Log.log;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +14,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.codeheadsystems.aseprite.Aseprite;
+import com.codeheadsystems.aseprite.impl.AsepriteConfiguration;
 import com.codeheadsystems.engine.TopLevelApplication;
 import com.codeheadsystems.engine.module.DaggerGameComponent;
 import com.codeheadsystems.engine.module.GameComponent;
@@ -30,6 +33,7 @@ public class Initializer extends ScreenAdapter {
     private final String TAG = getClass().getSimpleName();
     private final TopLevelApplication topLevelApplication;
     private final Rectangle progressBarBounds;
+    private final AsepriteConfiguration asepriteConfiguration;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private Texture image;
@@ -38,6 +42,7 @@ public class Initializer extends ScreenAdapter {
     public Initializer(final TopLevelApplication topLevelApplication) {
         this.topLevelApplication = topLevelApplication;
         this.progressBarBounds = new Rectangle();
+        this.asepriteConfiguration = new AsepriteConfiguration();
     }
 
     @Override
@@ -97,17 +102,24 @@ public class Initializer extends ScreenAdapter {
     }
 
     private AssetManager createAssetManager() {
-        final AssetManager newAssetManager = new AssetManager();
-        newAssetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        final FileHandle fs = Gdx.files.internal("assets.txt");
+        final Array<String> loadedCache = new Array<>();
+        final AssetManager newAssetManager = asepriteConfiguration.configureAssetManager();
+        final FileHandleResolver resolver = newAssetManager.getFileHandleResolver();
+        newAssetManager.setLoader(TiledMap.class, new TmxMapLoader(resolver));
+        final FileHandle fs = resolver.resolve("assets.txt");
         for (String file : fs.readString().split("\n")) {
             fromClassName(file).ifPresentOrElse(
                 type -> {
-                    log.debug(TAG, "Loading: " + file + " as: " + type);
-                    newAssetManager.load(file, type);
+                    final String storedName = type.equals(Aseprite.class) ? asepriteConfiguration.getAssetManagerBasename(file) : file;
+                    if (!loadedCache.contains(storedName, false)) { // if not already loading
+                        loadedCache.add(storedName);
+                        log.debug(TAG, "Loading: " + storedName + " as: " + type.getName());
+                        newAssetManager.load(storedName, type);
+                    }
                 },
                 () -> log.error(TAG, "Unknown type for: " + file));
         }
+        loadedCache.clear();
         return newAssetManager;
     }
 
