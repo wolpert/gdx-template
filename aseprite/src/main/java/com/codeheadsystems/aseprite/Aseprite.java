@@ -9,6 +9,7 @@ import static com.codeheadsystems.engine.utility.Log.log;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import java.util.Map;
 import java.util.Set;
@@ -24,14 +25,17 @@ public class Aseprite implements Disposable {
     private final String name;
     private final Texture texture;
     private final Map<String, Animation<TextureRegion>> animations;
+    private final Map<String, Rectangle> slices;
 
     public Aseprite(final String name,
                     final Texture texture,
-                    final Map<String, Animation<TextureRegion>> animations) {
+                    final Map<String, Animation<TextureRegion>> animations,
+                    final Map<String, Rectangle> slices) {
         this.name = name;
         this.texture = texture;
         this.animations = animations;
-        log.debug(TAG, "Aseprite("+name+")");
+        this.slices = slices;
+        log.debug(TAG, "Aseprite(" + name + ") slices:" + slices.size());
     }
 
     @Override
@@ -63,6 +67,10 @@ public class Aseprite implements Disposable {
 
     public Animation<TextureRegion> get(final String name) {
         return animations.get(name);
+    }
+
+    public Map<String, Rectangle> getSlices() {
+        return slices;
     }
 
 }

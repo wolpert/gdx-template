@@ -9,6 +9,10 @@ import static com.codeheadsystems.engine.utility.Log.log;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.codeheadsystems.aseprite.impl.DefaultCollisionSupplier;
+import com.codeheadsystems.aseprite.impl.SlicedCollisionSupplier;
+import java.util.function.Supplier;
 
 /**
  * An aseprite is essentially a set of animations.
@@ -19,8 +23,9 @@ public class AnimatedSprite extends Sprite {
     private static final String TAG = "Aseprite";
 
     private final Aseprite aseprite;
-    private final float hightWidthRatio;
-    private final float widthHightRatio;
+    private final float heightWidthRatio;
+    private final float widthHeightRatio;
+    private final Supplier<Rectangle[]> collisionSupplier;
 
     private Animation<TextureRegion> currentAnimation;
     private float currentTime;
@@ -32,16 +37,22 @@ public class AnimatedSprite extends Sprite {
         log.debug(TAG, "AnimatedSprite(" + aseprite.getName() + ")");
         animation(DEFAULT_ANIMATION);
         setFrame(0f);
-        this.hightWidthRatio = (float) getRegionHeight() / (float) getRegionWidth();
-        this.widthHightRatio = (float) getRegionWidth() / (float) getRegionHeight();
+        this.heightWidthRatio = (float) getRegionHeight() / (float) getRegionWidth();
+        this.widthHeightRatio = (float) getRegionWidth() / (float) getRegionHeight();
+        if (aseprite.getSlices() == null || aseprite.getSlices().isEmpty()) {
+            this.collisionSupplier = new DefaultCollisionSupplier(this);
+        } else {
+            final Rectangle[] slices = aseprite.getSlices().values().toArray(Rectangle[]::new);
+            this.collisionSupplier = new SlicedCollisionSupplier(this, slices);
+        }
     }
 
-    public float getHightWidthRatio() {
-        return hightWidthRatio;
+    public float getHeightWidthRatio() {
+        return heightWidthRatio;
     }
 
-    public float getWidthHightRatio() {
-        return widthHightRatio;
+    public float getWidthHeightRatio() {
+        return widthHeightRatio;
     }
 
     public boolean animation(String animationName) {
@@ -72,6 +83,10 @@ public class AnimatedSprite extends Sprite {
         setFrame(currentTime);
     }
 
+    public Rectangle[] getCollisionRectangles() {
+        return collisionSupplier.get();
+    }
+
     /**
      * Call this to automatically get the frame you want. Does not update the stored time.
      *
@@ -84,5 +99,4 @@ public class AnimatedSprite extends Sprite {
         TextureRegion frame = currentAnimation.getKeyFrame(stateTime, true);
         setRegion(frame);
     }
-
 }

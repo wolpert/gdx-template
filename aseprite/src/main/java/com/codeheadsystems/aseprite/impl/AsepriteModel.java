@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
  * this.
  */
 public class AsepriteModel {
+
     public LinkedHashMap<String, AsepriteFrame> frames; // linked list is needed for the order
     public AsepriteMeta meta;
 
@@ -18,6 +19,7 @@ public class AsepriteModel {
         public Size size;
         public String image;
         public FrameTags[] frameTags;
+        public Slice[] slices;
     }
 
     public static class FrameTags {
@@ -40,5 +42,15 @@ public class AsepriteModel {
 
     public static class Size {
         public int w, h;
+    }
+
+    public static class Slice {
+        public String name;
+        public SliceKey[] keys;
+    }
+
+    public static class SliceKey {
+        public int frame;
+        public Frame bounds;
     }
 }

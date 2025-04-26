@@ -16,6 +16,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.codeheadsystems.aseprite.Aseprite;
 import com.codeheadsystems.aseprite.impl.AsepriteModel;
@@ -58,7 +59,20 @@ public class AsepriteLoader extends AsynchronousAssetLoader<Aseprite, AsepriteLo
         final TextureRegion[] textureRegions = buildTextureRegionsFrom(asepriteModel, texture);
         final Map<String, Animation<TextureRegion>> animations =
             buildAnimationsFrom(frameDurationSeconds, textureRegions, asepriteModel.meta.frameTags);
-        aseprite = new Aseprite(name, texture, animations);
+        final Map<String, Rectangle> slices = extractSlices(asepriteModel.meta.slices);
+        aseprite = new Aseprite(name, texture, animations, slices);
+    }
+
+    private Map<String, Rectangle> extractSlices(final AsepriteModel.Slice[] slices) {
+        final Map<String, Rectangle> slicesMap = new LinkedHashMap<>();
+        if (slices != null) {
+            for (AsepriteModel.Slice slice : slices) {
+                final AsepriteModel.Frame frame = slice.keys[0].bounds;
+                final Rectangle rectangle = new Rectangle(frame.x, frame.y, frame.w, frame.h);
+                slicesMap.put(slice.name, rectangle);
+            }
+        }
+        return slicesMap;
     }
 
     @Override
