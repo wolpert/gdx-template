@@ -14,7 +14,7 @@ immutables = '2.11.3'
 junit-jupiter = "5.13.4"
 mokito = '5.19.0'
 record-builder = '48'
-smr = '3.0.4'
+smr = '3.0.5'
 
 [libraries]
 androidx-core = { module = "androidx.core:core", version.ref = "androidx" }
