@@ -6,14 +6,14 @@ ai = '1.8.2'
 androidx = '1.13.1'
 ashley = '1.7.4'
 assertj = "3.27.6"
-dagger = "2.57.1"
+dagger = "2.57.2"
 desugar = "2.1.5"
 graalHelper = '2.0.1'
 gdx = '1.13.5'
 immutables = '2.11.4'
 junit-jupiter = "5.13.4"
 mokito = '5.20.0'
-record-builder = '48'
+record-builder = '49'
 smr = '3.0.5'
 
 [libraries]
