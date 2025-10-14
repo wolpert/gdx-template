@@ -10,7 +10,7 @@ buildscript {
   }
 }
 plugins {
-  id "io.github.fourlastor.construo" version "2.0.1"
+  id "io.github.fourlastor.construo" version "2.0.2"
   id "application"
 }
 
