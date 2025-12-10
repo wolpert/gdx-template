@@ -12,7 +12,7 @@ graalHelper = '2.0.1'
 gdx = '1.14.0'
 immutables = '2.12.0'
 junit-jupiter = "6.0.1"
-mokito = '5.20.0'
+mokito = '5.21.0'
 record-builder = '51'
 smr = '3.0.5'
 
