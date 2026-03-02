@@ -12,9 +12,9 @@ graalHelper = '2.0.1'
 gdx = '1.14.0'
 immutables = '2.12.1'
 junit-jupiter = "6.0.3"
-mokito = '5.21.0'
+mokito = '5.22.0'
 record-builder = '52'
-smr = '3.0.5'
+smr = '3.1.0'
 
 [libraries]
 androidx-core = { module = "androidx.core:core", version.ref = "androidx" }
