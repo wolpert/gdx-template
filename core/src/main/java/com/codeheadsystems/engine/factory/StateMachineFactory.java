@@ -78,13 +78,8 @@ public class StateMachineFactory {
         }
 
         @Override
-        public void handleTransitionEvent(final Context context, final State state, final State state1, final Event event) {
-            log.debug(TAG, "handleTransitionEvent " + state + " -> " + state1 + ":" + event);
-            dispatcher.handleTransitionEvent(context, state, state1);
-        }
-
-        @Override
         public void handleTransitionEvent(final Context context, final State state, final State state1) {
+            log.debug(TAG, "handleTransitionEvent " + state + " -> " + state1);
             dispatcher.handleTransitionEvent(context, state, state1);
         }
 

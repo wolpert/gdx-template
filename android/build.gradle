@@ -36,7 +36,7 @@ android {
   }
   defaultConfig {
     applicationId = 'com.codeheadsystems.engine'
-    minSdkVersion 19
+    minSdkVersion 21
     targetSdkVersion 34
     versionCode = 1
     versionName = '1.0'
@@ -61,6 +61,12 @@ repositories {
 }
 
 configurations { natives }
+
+configurations.configureEach {
+  resolutionStrategy {
+    force "androidx.core:core:${libs.versions.androidx.get()}"
+  }
+}
 
 dependencies {
   coreLibraryDesugaring(libs.desugar)
