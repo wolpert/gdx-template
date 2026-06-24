@@ -13,7 +13,7 @@ gdx = '1.14.2'
 immutables = '2.12.2'
 junit-jupiter = "6.1.0"
 mokito = '5.23.0'
-record-builder = '52'
+record-builder = '53'
 smr = '3.1.1'
 
 [libraries]
