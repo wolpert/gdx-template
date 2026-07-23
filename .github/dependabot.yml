@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "gradle" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
     ignore:
       - dependency-name: "com.android.tools.build:gradle"
       - dependency-name: "androidx.core:core"
